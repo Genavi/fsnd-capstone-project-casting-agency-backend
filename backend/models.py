@@ -213,3 +213,4 @@ class MovieToArtist(db.Model):
         db.session.commit()
 
     def __repr__(self):
+        return json.dumps(self.short())
