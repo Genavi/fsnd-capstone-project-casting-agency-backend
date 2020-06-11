@@ -205,3 +205,30 @@ def get_actor(actor_id):
     abort(404)
 
 
+'''
+POST /actors
+'''
+@app.route('/actors', methods=['POST'])
+def post_actors():
+  try:
+    body = request.get_json()
+    if not ('name' in body and 'age' in body and 'gender' in body):
+      abort(422)
+
+    new_name = body.get('name')
+    new_age = body.get('age')
+    new_gender = body.get('gender')
+
+    actor = Actor(name=new_name, age=new_age, gender=new_gender)
+    actor.insert()
+
+    return jsonify({
+      'success': True,
+      'actors': [actor.format() for actor in Actor.query.all()]
+    }), 200
+
+  except Exception as e:
+    print(e)
+    abort(404)
+
+
