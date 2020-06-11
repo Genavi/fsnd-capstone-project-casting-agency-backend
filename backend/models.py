@@ -30,6 +30,15 @@ def db_drop_and_create_all():
     db.create_all()
 
 '''
+MovieActor
+an assosiation table, extends the base SQLAlchemy Table
+'''
+movieActor = db.Table("movie_actors",
+    db.Column("movie_id", db.Integer, db.ForeignKey("movies.id")),
+    db.Column("actor_id", db.Integer, db.ForeignKey("actors.id"))
+)
+
+'''
 Movie
 a persistent movie entity, extends the base SQLAlchemy Model
 '''
@@ -93,20 +102,21 @@ class Movie(db.Model):
 
 
 '''
-Artist
-a persistent artist entity, extends the base SQLAlchemy Model
+Actor
+a persistent actor entity, extends the base SQLAlchemy Model
 '''
-class Artist(db.Model):
-    __tablename__ = 'artists'
+class Actor(db.Model):
+    __tablename__ = 'actors'
 
     id = Column(Integer().with_variant(Integer, "sqlite"), primary_key=True)
     name = Column(String(100), unique=True)
     age =  Column(String(3), nullable=False)
     gender =  Column(String(10), nullable=False)
+    movies = db.relationship("Movie", secondary=movieActor, backref=db.backref("cast", lazy="dynamic"))
 
     '''
     format()
-        representation of the Artist model
+        representation of the Actor model
     '''
     def format(self):
         return {
@@ -122,8 +132,8 @@ class Artist(db.Model):
         the model must have a unique name
         the model must have a unique id or null id
         EXAMPLE
-            artist = Artist(name=req_name, age=req_age, gender=req_gender)
-            artist.insert()
+            actor = Actor(name=req_name, age=req_age, gender=req_gender)
+            actor.insert()
     '''
     def insert(self):
         db.session.add(self)
@@ -134,8 +144,8 @@ class Artist(db.Model):
         deletes a new model into a database
         the model must exist in the database
         EXAMPLE
-            artist = Artist(name=req_name, age=req_age, gender=req_gender)
-            artist.delete()
+            actor = Actor(name=req_name, age=req_age, gender=req_gender)
+            actor.delete()
     '''
     def delete(self):
         db.session.delete(self)
@@ -146,68 +156,9 @@ class Artist(db.Model):
         updates a new model into a database
         the model must exist in the database
         EXAMPLE
-            artist = Artist.query.filter(Artist.id == id).one_or_none()
-            artist.name = 'Elijah Wood'
-            artist.update()
-    '''
-    def update(self):
-        db.session.commit()
-
-    def __repr__(self):
-        return json.dumps(self.short())
-
-
-class MovieToArtist(db.Model):
-    __tablename__ = 'movies_to_artists'
-
-    id = db.Column(db.Integer, primary_key=True)
-    movie_id = db.Column(db.Integer, db.ForeignKey(Movie.id, ondelete='CASCADE'), nullable=False)
-    artist_id = db.Column(db.Integer, db.ForeignKey(Artist.id, ondelete='CASCADE'), nullable=False)
-        
-    '''
-    format()
-        representation of the MovieToArtist model
-    '''
-    def format(self):
-        return {
-            'id': self.id,
-            'movie_id': self.movie_id,
-            'artist_id': self.artist_id
-        }
-
-    '''
-    insert()
-        inserts a new model into a database
-        the model must have a unique name
-        the model must have a unique id or null id
-        EXAMPLE
-            movietoartist = MovieToArtist(movie_id=req_movie_id, artist_id=req_artist_id)
-            movietoartist.insert()
-    '''
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    '''
-    delete()
-        deletes a new model into a database
-        the model must exist in the database
-        EXAMPLE
-            movietoartist = MovieToArtist(movie_id=req_movie_id, artist_id=req_artist_id)
-            movietoartist.delete()
-    '''
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    '''
-    update()
-        updates a new model into a database
-        the model must exist in the database
-        EXAMPLE
-            movietoartist = MovieToArtist.query.filter(MovieToArtist.id == id).one_or_none()
-            movietoartist.movie_id = 2
-            movietoartist.update()
+            actor = Actor.query.filter(Actor.id == id).one_or_none()
+            actor.name = 'Elijah Wood'
+            actor.update()
     '''
     def update(self):
         db.session.commit()
