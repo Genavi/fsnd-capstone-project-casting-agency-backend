@@ -3,7 +3,7 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-from models import setup_db, Movie, Artist, MovieToArtist
+from models import setup_db, Movie, Actor, db
 
 def create_app(test_config=None):
   # create and configure the app
