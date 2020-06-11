@@ -35,6 +35,24 @@ def get_movies():
 
 
 '''
+GET /movies/<id>
+'''
+@app.route('/movies/<int:movie_id>', methods=['GET'])
+def get_movie(movie_id):
+  try:
+    movie = Movie.query.get(movie_id)
+
+    return jsonify({
+      'success': True,
+      'movie': movie.format(),
+      'cast': [actor.format() for actor in movie.cast]
+    }), 200
+
+  except Exception as e:
+    abort(404)
+
+
+'''
 POST /movies
 '''
 @app.route('/movies', methods=['POST'])
