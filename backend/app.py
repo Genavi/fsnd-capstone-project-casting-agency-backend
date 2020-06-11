@@ -232,3 +232,39 @@ def post_actors():
     abort(404)
 
 
+'''
+PATCH /actors/<id>
+'''
+@app.route('/actors/<int:id>', methods=['PATCH'])
+def patch_actor(id):
+  try:
+    body = request.get_json()
+    actor = Actor.query.get(id)
+
+    if actor is None:
+      abort(404)
+
+    if "name" in body and "name" is None or "age" in body and "age" is None or "gender" in body and "gender" is None:
+      abort(400)
+
+    if "name" in body:
+      actor.name = body['name']
+
+    if "age" in body:
+      actor.age = body['age']
+
+    if "gender" in body:
+      actor.gender = body['gender']
+    
+    actor.update()
+
+    return jsonify({
+      'success': True,
+      'actors': [actor.format() for actor in Actor.query.all()]
+    }), 200
+
+  except Exception as e:
+    print(e)
+    abort(404)
+
+
