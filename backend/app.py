@@ -186,3 +186,22 @@ def get_actors():
     abort(404)
 
 
+'''
+GET /actors/<id>
+'''
+@app.route('/actors/<int:actor_id>', methods=['GET'])
+def get_actor(actor_id):
+  try:
+    actor = Actor.query.get(actor_id)
+
+    return jsonify({
+      'success': True,
+      'actor': actor.format(),
+      'movies': [movie.format() for movie in actor.movies]
+    }), 200
+
+  except Exception as e:
+    print(e)
+    abort(404)
+
+
