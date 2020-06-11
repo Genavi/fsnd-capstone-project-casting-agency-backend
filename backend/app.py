@@ -105,9 +105,42 @@ def patch_movie(id):
             'movies': [movie.format() for movie in Movie.query.all()]
         }), 200
 
-
     except Exception:
         abort(404)
+
+
+'''
+POST /movies/<id>/append_cast_member
+'''
+@app.route('/movies/<int:id>/append_cast_members', methods=['POST'])
+def patch_movie_cast(id):
+  try:
+    body = request.get_json()
+    movie = Movie.query.get(id)
+    
+    if movie is None:
+      abort(404)
+
+    if "actor_id" in body and "actor_id" is None:
+      abort(400)
+
+    if "actor_id" in body:
+      actor = Actor.query.get(body['actor_id'])
+
+      if actor is None:
+        abort(404)
+
+      movie.cast.append(actor)
+      movie.update()
+
+    return jsonify({
+        'success': True,
+        'cast': [actor.format() for actor in movie.cast]
+    }), 200
+
+  except Exception as e:
+    print(e)
+    abort(404)
 
 
 '''
