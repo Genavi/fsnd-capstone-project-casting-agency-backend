@@ -268,3 +268,23 @@ def patch_actor(id):
     abort(404)
 
 
+'''
+DELETE /actors/<id>
+'''
+@app.route('/actors/<id>', methods=['DELETE'])
+def delete_actors(id):
+  try:
+    actor = Actor.query.get(id)
+
+    if actor is None:
+      abort(404)
+        
+    actor.delete()
+
+    return jsonify({
+      'success': True,
+      'delete': id
+    })
+    
+  except Exception:
+    abort(404)
