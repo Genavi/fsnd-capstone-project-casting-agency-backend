@@ -60,7 +60,7 @@ def post_movies():
   try:
     body = request.get_json()
     if not ('title' in body and 'release_date' in body):
-        abort(422)
+      abort(422)
 
     new_movie = body.get('title')
     new_release_date = body.get('release_date')
@@ -69,8 +69,8 @@ def post_movies():
     movie.insert()
 
     return jsonify({
-        'success': True,
-        'movies': [movie.format() for movie in Movie.query.all()]
+      'success': True,
+      'movies': [movie.format() for movie in Movie.query.all()]
     }), 200
 
   except Exception:
@@ -82,31 +82,31 @@ PATCH /movies/<id>
 '''
 @app.route('/movies/<int:id>', methods=['PATCH'])
 def patch_movie(id):
-    try:
-        body = request.get_json()
-        movie = Movie.query.get(id)
+  try:
+    body = request.get_json()
+    movie = Movie.query.get(id)
 
-        if movie is None:
-            abort(404)
+    if movie is None:
+      abort(404)
 
-        if "title" in body and "title" is None or "release_date" in body and "release_date" is None:
-            abort(400)
+    if "title" in body and "title" is None or "release_date" in body and "release_date" is None:
+      abort(400)
 
-        if "title" in body:
-            movie.title = body['title']
+    if "title" in body:
+      movie.title = body['title']
 
-        if "release_date" in body:
-            movie.release_date = body['release_date']
-        
-        movie.update()
+    if "release_date" in body:
+      movie.release_date = body['release_date']
+    
+    movie.update()
 
-        return jsonify({
-            'success': True,
-            'movies': [movie.format() for movie in Movie.query.all()]
-        }), 200
+    return jsonify({
+      'success': True,
+      'movies': [movie.format() for movie in Movie.query.all()]
+    }), 200
 
-    except Exception:
-        abort(404)
+  except Exception:
+      abort(404)
 
 
 '''
@@ -134,8 +134,8 @@ def patch_movie_cast(id):
       movie.update()
 
     return jsonify({
-        'success': True,
-        'cast': [actor.format() for actor in movie.cast]
+      'success': True,
+      'cast': [actor.format() for actor in movie.cast]
     }), 200
 
   except Exception as e:
@@ -148,18 +148,20 @@ DELETE /movies/<id>
 '''
 @app.route('/movies/<id>', methods=['DELETE'])
 def delete_movies(id):
-    try:
-        movie = Movie.query.get(id)
+  try:
+    movie = Movie.query.get(id)
 
-        if movie is None:
-            abort(404)
-            
-        movie.delete()
-
-        return jsonify({
-            'success': True,
-            'delete': id
-        })
+    if movie is None:
+      abort(404)
         
-    except Exception:
-        abort(404)
+    movie.delete()
+
+    return jsonify({
+      'success': True,
+      'delete': id
+    })
+      
+  except Exception:
+    abort(404)
+
+
