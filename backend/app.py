@@ -165,3 +165,24 @@ def delete_movies(id):
     abort(404)
 
 
+'''
+GET /actors
+'''
+@app.route('/actors', methods=['GET'])
+def get_actors():
+  try:
+    actors = Actor.query.all()
+
+    actors_list = []
+    for actor in actors:
+      actors_list.append(actor.format())
+
+    return jsonify({
+      'success': True,
+      'actors': actors_list
+    }), 200
+
+  except Exception:
+    abort(404)
+
+
