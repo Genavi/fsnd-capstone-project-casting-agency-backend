@@ -25,15 +25,9 @@ GET /movies
 @app.route('/movies', methods=['GET'])
 def get_movies():
   try:
-    movies = Movie.query.all()
-
-    movies_list = []
-    for movie in movies:
-      movies_list.append(movie.format())
-
     return jsonify({
       'success': True,
-      'movies': movies_list
+      'movies': [movie.format() for movie in Movie.query.all()]
     }), 200
 
   except Exception:
