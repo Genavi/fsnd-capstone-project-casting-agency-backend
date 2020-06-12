@@ -110,9 +110,31 @@ def patch_movie(id):
 
 
 '''
-POST /movies/<id>/append_cast_member
+DELETE /movies/<id>
 '''
-@app.route('/movies/<int:id>/append_cast_members', methods=['POST'])
+@app.route('/movies/<id>', methods=['DELETE'])
+def delete_movies(id):
+  try:
+    movie = Movie.query.get(id)
+
+    if movie is None:
+      abort(404)
+        
+    movie.delete()
+
+    return jsonify({
+      'success': True,
+      'delete': id
+    })
+      
+  except Exception:
+    abort(404)
+
+
+'''
+POST /movies/<id>/cast_members
+'''
+@app.route('/movies/<int:id>/cast_members', methods=['POST'])
 def patch_movie_cast(id):
   try:
     body = request.get_json()
@@ -144,24 +166,36 @@ def patch_movie_cast(id):
 
 
 '''
-DELETE /movies/<id>
+DELETE /movies/<id>/cast_members
 '''
-@app.route('/movies/<id>', methods=['DELETE'])
-def delete_movies(id):
+@app.route('/movies/<int:id>/cast_members', methods=['DELETE'])
+def delete_movie_cast(id):
   try:
+    body = request.get_json()
     movie = Movie.query.get(id)
-
+    
     if movie is None:
       abort(404)
-        
-    movie.delete()
+
+    if "actor_id" in body and "actor_id" is None:
+      abort(400)
+
+    if "actor_id" in body:
+      actor = Actor.query.get(body['actor_id'])
+
+      if actor is None:
+        abort(404)
+
+      movie.cast.remove(actor)
+      movie.update()
 
     return jsonify({
       'success': True,
-      'delete': id
-    })
-      
-  except Exception:
+      'cast': [actor.format() for actor in movie.cast]
+    }), 200
+
+  except Exception as e:
+    print(e)
     abort(404)
 
 
