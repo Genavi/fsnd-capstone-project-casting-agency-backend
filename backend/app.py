@@ -87,12 +87,12 @@ def post_movies():
 '''
 PATCH /movies/<id>
 '''
-@app.route('/movies/<int:id>', methods=['PATCH'])
+@app.route('/movies/<int:movie_id>', methods=['PATCH'])
 @requires_auth('patch: movies')
-def patch_movie(id):
+def patch_movie(movie_id):
   try:
     body = request.get_json()
-    movie = Movie.query.get(id)
+    movie = Movie.query.get(movie_id)
 
     if movie is None:
       abort(404)
@@ -120,11 +120,11 @@ def patch_movie(id):
 '''
 DELETE /movies/<id>
 '''
-@app.route('/movies/<id>', methods=['DELETE'])
+@app.route('/movies/<int:movie_id>', methods=['DELETE'])
 @requires_auth('delete: movies')
-def delete_movies(id):
+def delete_movies(movie_id):
   try:
-    movie = Movie.query.get(id)
+    movie = Movie.query.get(movie_id)
 
     if movie is None:
       abort(404)
@@ -133,7 +133,7 @@ def delete_movies(id):
 
     return jsonify({
       'success': True,
-      'delete': id
+      'delete': movie_id
     })
       
   except Exception:
@@ -143,12 +143,12 @@ def delete_movies(id):
 '''
 POST /movies/<id>/cast_members
 '''
-@app.route('/movies/<int:id>/cast_members', methods=['POST'])
+@app.route('/movies/<int:movie_id>/cast_members', methods=['POST'])
 @requires_auth('post: cast_members')
-def patch_movie_cast(id):
+def patch_movie_cast(movie_id):
   try:
     body = request.get_json()
-    movie = Movie.query.get(id)
+    movie = Movie.query.get(movie_id)
     
     if movie is None:
       abort(404)
@@ -178,12 +178,12 @@ def patch_movie_cast(id):
 '''
 DELETE /movies/<id>/cast_members
 '''
-@app.route('/movies/<int:id>/cast_members', methods=['DELETE'])
+@app.route('/movies/<int:movie_id>/cast_members', methods=['DELETE'])
 @requires_auth('delete: cast_members')
-def delete_movie_cast(id):
+def delete_movie_cast(movie_id):
   try:
     body = request.get_json()
-    movie = Movie.query.get(id)
+    movie = Movie.query.get(movie_id)
     
     if movie is None:
       abort(404)
@@ -286,12 +286,12 @@ def post_actors():
 '''
 PATCH /actors/<id>
 '''
-@app.route('/actors/<int:id>', methods=['PATCH'])
+@app.route('/actors/<int:actor_id>', methods=['PATCH'])
 @requires_auth('patch: actors')
-def patch_actor(id):
+def patch_actor(actor_id):
   try:
     body = request.get_json()
-    actor = Actor.query.get(id)
+    actor = Actor.query.get(actor_id)
 
     if actor is None:
       abort(404)
@@ -323,11 +323,11 @@ def patch_actor(id):
 '''
 DELETE /actors/<id>
 '''
-@app.route('/actors/<id>', methods=['DELETE'])
+@app.route('/actors/<int:actor_id>', methods=['DELETE'])
 @requires_auth('delete: actors')
-def delete_actors(id):
+def delete_actors(actor_id):
   try:
-    actor = Actor.query.get(id)
+    actor = Actor.query.get(actor_id)
 
     if actor is None:
       abort(404)
@@ -336,7 +336,7 @@ def delete_actors(id):
 
     return jsonify({
       'success': True,
-      'delete': id
+      'delete': actor_id
     })
     
   except Exception:
