@@ -43,6 +43,9 @@ def get_movie(movie_id):
   try:
     movie = Movie.query.get(movie_id)
 
+    if movie is None:
+      abort(404)
+
     return jsonify({
       'success': True,
       'movie': movie.format(),
@@ -228,6 +231,9 @@ GET /actors/<id>
 def get_actor(actor_id):
   try:
     actor = Actor.query.get(actor_id)
+
+    if actor is None:
+      abort(404)
 
     return jsonify({
       'success': True,
