@@ -288,3 +288,52 @@ def delete_actors(id):
     
   except Exception:
     abort(404)
+
+
+# Error Handling
+'''
+Error Handler for 422
+'''
+@app.errorhandler(422)
+def unprocessable(error):
+    return jsonify({
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+    }), 422
+
+
+'''
+Error Handler for 400
+'''
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        'success': False,
+        'error': 400,
+        'message': "bad request"
+    }), 400
+
+
+'''
+Error Handler for 404
+'''
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        'success': False,
+        'error': 404,
+        'message': "unprocessable"
+    }), 404
+
+
+'''
+Error Handler for AuthError
+'''
+@app.errorhandler(AuthError)
+def auth_error(error):
+    return jsonify({
+        'success': False,
+        'error': error.status_code,
+        'message': error.error['description']
+    }), error.status_code
