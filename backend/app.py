@@ -25,7 +25,7 @@ GET /movies
 '''
 @app.route('/movies', methods=['GET'])
 @requires_auth('get: movies')
-def get_movies():
+def get_movies(jwt):
   try:
     return jsonify({
       'success': True,
@@ -41,7 +41,7 @@ GET /movies/<id>
 '''
 @app.route('/movies/<int:movie_id>', methods=['GET'])
 @requires_auth('get: movies')
-def get_movie(movie_id):
+def get_movie(jwt, movie_id):
   try:
     movie = Movie.query.get(movie_id)
 
@@ -63,7 +63,7 @@ POST /movies
 '''
 @app.route('/movies', methods=['POST'])
 @requires_auth('post: movies')
-def post_movies():
+def post_movies(jwt):
   try:
     body = request.get_json()
     if not ('title' in body and 'release_date' in body):
@@ -89,7 +89,7 @@ PATCH /movies/<id>
 '''
 @app.route('/movies/<int:movie_id>', methods=['PATCH'])
 @requires_auth('patch: movies')
-def patch_movie(movie_id):
+def patch_movie(jwt, movie_id):
   try:
     body = request.get_json()
     movie = Movie.query.get(movie_id)
@@ -122,7 +122,7 @@ DELETE /movies/<id>
 '''
 @app.route('/movies/<int:movie_id>', methods=['DELETE'])
 @requires_auth('delete: movies')
-def delete_movies(movie_id):
+def delete_movies(jwt, movie_id):
   try:
     movie = Movie.query.get(movie_id)
 
@@ -145,7 +145,7 @@ POST /movies/<id>/cast_members
 '''
 @app.route('/movies/<int:movie_id>/cast_members', methods=['POST'])
 @requires_auth('post: cast_members')
-def patch_movie_cast(movie_id):
+def patch_movie_cast(jwt, movie_id):
   try:
     body = request.get_json()
     movie = Movie.query.get(movie_id)
@@ -180,7 +180,7 @@ DELETE /movies/<id>/cast_members
 '''
 @app.route('/movies/<int:movie_id>/cast_members', methods=['DELETE'])
 @requires_auth('delete: cast_members')
-def delete_movie_cast(movie_id):
+def delete_movie_cast(jwt, movie_id):
   try:
     body = request.get_json()
     movie = Movie.query.get(movie_id)
@@ -215,7 +215,7 @@ GET /actors
 '''
 @app.route('/actors', methods=['GET'])
 @requires_auth('get: actors')
-def get_actors():
+def get_actors(jwt):
   try:
     actors = Actor.query.all()
 
@@ -237,7 +237,7 @@ GET /actors/<id>
 '''
 @app.route('/actors/<int:actor_id>', methods=['GET'])
 @requires_auth('get: actors')
-def get_actor(actor_id):
+def get_actor(jwt, actor_id):
   try:
     actor = Actor.query.get(actor_id)
 
@@ -260,7 +260,7 @@ POST /actors
 '''
 @app.route('/actors', methods=['POST'])
 @requires_auth('post: actors')
-def post_actors():
+def post_actors(jwt):
   try:
     body = request.get_json()
     if not ('name' in body and 'age' in body and 'gender' in body):
@@ -288,7 +288,7 @@ PATCH /actors/<id>
 '''
 @app.route('/actors/<int:actor_id>', methods=['PATCH'])
 @requires_auth('patch: actors')
-def patch_actor(actor_id):
+def patch_actor(jwt, actor_id):
   try:
     body = request.get_json()
     actor = Actor.query.get(actor_id)
@@ -325,7 +325,7 @@ DELETE /actors/<id>
 '''
 @app.route('/actors/<int:actor_id>', methods=['DELETE'])
 @requires_auth('delete: actors')
-def delete_actors(actor_id):
+def delete_actors(jwt, actor_id):
   try:
     actor = Actor.query.get(actor_id)
 
