@@ -24,6 +24,7 @@ if __name__ == '__main__':
 GET /movies
 '''
 @app.route('/movies', methods=['GET'])
+@requires_auth('get: movies')
 def get_movies():
   try:
     return jsonify({
@@ -39,6 +40,7 @@ def get_movies():
 GET /movies/<id>
 '''
 @app.route('/movies/<int:movie_id>', methods=['GET'])
+@requires_auth('get: movies')
 def get_movie(movie_id):
   try:
     movie = Movie.query.get(movie_id)
@@ -60,6 +62,7 @@ def get_movie(movie_id):
 POST /movies
 '''
 @app.route('/movies', methods=['POST'])
+@requires_auth('post: movies')
 def post_movies():
   try:
     body = request.get_json()
@@ -85,6 +88,7 @@ def post_movies():
 PATCH /movies/<id>
 '''
 @app.route('/movies/<int:id>', methods=['PATCH'])
+@requires_auth('patch: movies')
 def patch_movie(id):
   try:
     body = request.get_json()
@@ -117,6 +121,7 @@ def patch_movie(id):
 DELETE /movies/<id>
 '''
 @app.route('/movies/<id>', methods=['DELETE'])
+@requires_auth('delete: movies')
 def delete_movies(id):
   try:
     movie = Movie.query.get(id)
@@ -139,6 +144,7 @@ def delete_movies(id):
 POST /movies/<id>/cast_members
 '''
 @app.route('/movies/<int:id>/cast_members', methods=['POST'])
+@requires_auth('post: cast_members')
 def patch_movie_cast(id):
   try:
     body = request.get_json()
@@ -173,6 +179,7 @@ def patch_movie_cast(id):
 DELETE /movies/<id>/cast_members
 '''
 @app.route('/movies/<int:id>/cast_members', methods=['DELETE'])
+@requires_auth('delete: cast_members')
 def delete_movie_cast(id):
   try:
     body = request.get_json()
@@ -207,6 +214,7 @@ def delete_movie_cast(id):
 GET /actors
 '''
 @app.route('/actors', methods=['GET'])
+@requires_auth('get: actors')
 def get_actors():
   try:
     actors = Actor.query.all()
@@ -228,6 +236,7 @@ def get_actors():
 GET /actors/<id>
 '''
 @app.route('/actors/<int:actor_id>', methods=['GET'])
+@requires_auth('get: actors')
 def get_actor(actor_id):
   try:
     actor = Actor.query.get(actor_id)
@@ -250,6 +259,7 @@ def get_actor(actor_id):
 POST /actors
 '''
 @app.route('/actors', methods=['POST'])
+@requires_auth('post: actors')
 def post_actors():
   try:
     body = request.get_json()
@@ -277,6 +287,7 @@ def post_actors():
 PATCH /actors/<id>
 '''
 @app.route('/actors/<int:id>', methods=['PATCH'])
+@requires_auth('patch: actors')
 def patch_actor(id):
   try:
     body = request.get_json()
@@ -313,6 +324,7 @@ def patch_actor(id):
 DELETE /actors/<id>
 '''
 @app.route('/actors/<id>', methods=['DELETE'])
+@requires_auth('delete: actors')
 def delete_actors(id):
   try:
     actor = Actor.query.get(id)
