@@ -57,7 +57,8 @@ class Movie(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'release_date': self.release_date
+            'release_date': self.release_date,
+            'cast': [actor.format() for actor in self.cast]
         }
 
     '''
