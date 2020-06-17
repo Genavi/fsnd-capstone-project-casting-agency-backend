@@ -9,7 +9,7 @@ export const environment = {
     url: 'drlearning.eu', // the auth0 domain prefix
     audience: 'castingagency', // the audience set for the auth0 app
     clientId: 'Ckwn2Q24iC1w3wWAVTIDw79hOp4JVJ6K', // the client id generated for the auth0 app
-    callbackURL: 'http://localhost:8100/tabs/user', // the base url of the running ionic application. 
+    callbackURL: 'http://localhost:8100', // the base url of the running ionic application. 
   }
 };
 
