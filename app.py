@@ -32,29 +32,8 @@ def get_movies(jwt):
       'movies': [movie.format() for movie in Movie.query.all()]
     }), 200
 
-  except Exception:
-      abort(404)
-
-
-'''
-GET /movies/<id>
-'''
-@app.route('/movies/<int:movie_id>', methods=['GET'])
-@requires_auth('get: movies')
-def get_movie(jwt, movie_id):
-  try:
-    movie = Movie.query.get(movie_id)
-
-    if movie is None:
-      abort(404)
-
-    return jsonify({
-      'success': True,
-      'movie': movie.format(),
-      'cast': [actor.format() for actor in movie.cast]
-    }), 200
-
   except Exception as e:
+    print(e)
     abort(404)
 
 
