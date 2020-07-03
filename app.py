@@ -3,7 +3,7 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-from models import setup_db, Movie, Actor, db
+from models import setup_db, Movie, Actor, movieActor, db
 from auth import AuthError, requires_auth
 
 def create_app(test_config=None):
@@ -18,6 +18,50 @@ app = create_app()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
+
+
+# FUNCTIONS
+'''
+Function to add castmembers to a movie
+'''
+def add_movie_cast(movie_id, actor_id):
+  try:
+    movie = Movie.query.get(movie_id)
+    actor = Actor.query.get(actor_id)
+    
+    if movie is None:
+      abort(404)
+    
+    if actor is None:
+      abort(404)
+
+    movie.cast.append(actor)
+
+  except Exception as e:
+    print(e)
+    abort(404)
+
+
+'''
+Function to delete castmembers from a movie
+'''
+def delete_movie_cast(movie_id, actor_id):
+  try:
+    movie = Movie.query.get(movie_id)
+    actor = Actor.query.get(actor_id)
+    
+    if movie is None:
+      abort(404)
+
+    if actor is None:
+      abort(404)
+
+    movie.cast.remove(actor)
+
+  except Exception as e:
+    print(e)
+    abort(404)
+
 
 # ROUTES
 '''
@@ -55,8 +99,7 @@ def post_movies(jwt):
     movie.insert()
 
     return jsonify({
-      'success': True,
-      'movies': [movie.format() for movie in Movie.query.all()]
+      'success': True
     }), 200
 
   except Exception:
@@ -84,16 +127,28 @@ def patch_movie(jwt, movie_id):
 
     if "release_date" in body:
       movie.release_date = body['release_date']
-    
+
+    if "cast" in body:
+      cast = body['cast']
+
+      ids = [x['id'] for x in cast if type(x) is not int]
+      for actor in movie.cast:
+        if actor.id not in (ids):
+          delete_movie_cast(movie_id, actor.id)
+
+      for actor in cast:
+        if type(actor) is int:
+          add_movie_cast(movie_id, actor)
+
     movie.update()
 
     return jsonify({
-      'success': True,
-      'movies': [movie.format() for movie in Movie.query.all()]
+      'success': True
     }), 200
 
-  except Exception:
-      abort(404)
+  except Exception as e:
+    print(e)
+    abort(404)
 
 
 '''
@@ -111,81 +166,10 @@ def delete_movies(jwt, movie_id):
     movie.delete()
 
     return jsonify({
-      'success': True,
-      'delete': movie_id
+      'success': True
     })
       
-  except Exception:
-    abort(404)
-
-
-'''
-POST /movies/<id>/cast_members
-'''
-@app.route('/movies/<int:movie_id>/cast_members', methods=['POST'])
-@requires_auth('post: cast_members')
-def patch_movie_cast(jwt, movie_id):
-  try:
-    body = request.get_json()
-    movie = Movie.query.get(movie_id)
-    
-    if movie is None:
-      abort(404)
-
-    if "actor_id" in body and "actor_id" is None:
-      abort(400)
-
-    if "actor_id" in body:
-      actor = Actor.query.get(body['actor_id'])
-
-      if actor is None:
-        abort(404)
-
-      movie.cast.append(actor)
-      movie.update()
-
-    return jsonify({
-      'success': True,
-      'cast': [actor.format() for actor in movie.cast]
-    }), 200
-
   except Exception as e:
-    print(e)
-    abort(404)
-
-
-'''
-DELETE /movies/<id>/cast_members
-'''
-@app.route('/movies/<int:movie_id>/cast_members', methods=['DELETE'])
-@requires_auth('delete: cast_members')
-def delete_movie_cast(jwt, movie_id):
-  try:
-    body = request.get_json()
-    movie = Movie.query.get(movie_id)
-    
-    if movie is None:
-      abort(404)
-
-    if "actor_id" in body and "actor_id" is None:
-      abort(400)
-
-    if "actor_id" in body:
-      actor = Actor.query.get(body['actor_id'])
-
-      if actor is None:
-        abort(404)
-
-      movie.cast.remove(actor)
-      movie.update()
-
-    return jsonify({
-      'success': True,
-      'cast': [actor.format() for actor in movie.cast]
-    }), 200
-
-  except Exception as e:
-    print(e)
     abort(404)
 
 
