@@ -58,7 +58,17 @@ class Movie(db.Model):
             'id': self.id,
             'title': self.title,
             'release_date': self.release_date,
-            'cast': [actor.format() for actor in self.cast]
+            'cast': [actor.simple() for actor in self.cast]
+        }
+    
+    '''
+    simple()
+        small representation of the Movie model
+    '''
+    def simple(self):
+        return {
+            'id': self.id,
+            'title': self.title
         }
 
     '''
@@ -124,7 +134,18 @@ class Actor(db.Model):
             'id': self.id,
             'name': self.name,
             'age': self.age,
-            'gender': self.gender
+            'gender': self.gender,
+            'movies': [movie.simple() for movie in self.movies]
+        }
+    
+    '''
+    simple()
+        small representation of the Actor model
+    '''
+    def simple(self):
+        return {
+            'id': self.id,
+            'name': self.name
         }
 
     '''
