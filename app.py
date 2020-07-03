@@ -131,7 +131,7 @@ def patch_movie(jwt, movie_id):
     if "cast" in body:
       cast = body['cast']
 
-      ids = [x['id'] for x in cast if type(x) is not int]
+      ids = [actor['id'] for actor in cast if type(actor) is not int]
       for actor in movie.cast:
         if actor.id not in (ids):
           delete_movie_cast(movie_id, actor.id)
@@ -180,41 +180,12 @@ GET /actors
 @requires_auth('get: actors')
 def get_actors(jwt):
   try:
-    actors = Actor.query.all()
-
-    actors_list = []
-    for actor in actors:
-      actors_list.append(actor.format())
-
     return jsonify({
       'success': True,
-      'actors': actors_list
+      'actors': [actor.format() for actor in Actor.query.all()]
     }), 200
 
   except Exception:
-    abort(404)
-
-
-'''
-GET /actors/<id>
-'''
-@app.route('/actors/<int:actor_id>', methods=['GET'])
-@requires_auth('get: actors')
-def get_actor(jwt, actor_id):
-  try:
-    actor = Actor.query.get(actor_id)
-
-    if actor is None:
-      abort(404)
-
-    return jsonify({
-      'success': True,
-      'actor': actor.format(),
-      'movies': [movie.format() for movie in actor.movies]
-    }), 200
-
-  except Exception as e:
-    print(e)
     abort(404)
 
 
@@ -237,8 +208,7 @@ def post_actors(jwt):
     actor.insert()
 
     return jsonify({
-      'success': True,
-      'actors': [actor.format() for actor in Actor.query.all()]
+      'success': True
     }), 200
 
   except Exception as e:
@@ -255,6 +225,7 @@ def patch_actor(jwt, actor_id):
   try:
     body = request.get_json()
     actor = Actor.query.get(actor_id)
+    print(body)
 
     if actor is None:
       abort(404)
@@ -270,12 +241,27 @@ def patch_actor(jwt, actor_id):
 
     if "gender" in body:
       actor.gender = body['gender']
+
+    if "cast" in body:
+      movies = body['cast']
+
+      ids = [movie['id'] for movie in movies if type(movie) is not int]
+      print("old movies")
+      for movie in actor.movies:
+        print(movie.id)
+        if movie.id not in (ids):
+          delete_movie_cast(movie.id, actor_id)
+
+      print("new movies")
+      for movie in movies:
+        print(movie)
+        if type(movie) is int:
+          add_movie_cast(movie, actor.id)
     
     actor.update()
 
     return jsonify({
-      'success': True,
-      'actors': [actor.format() for actor in Actor.query.all()]
+      'success': True
     }), 200
 
   except Exception as e:
@@ -298,8 +284,7 @@ def delete_actors(jwt, actor_id):
     actor.delete()
 
     return jsonify({
-      'success': True,
-      'delete': actor_id
+      'success': True
     })
     
   except Exception:
