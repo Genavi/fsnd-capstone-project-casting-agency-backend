@@ -62,6 +62,11 @@ def create_app(test_config=None):
 
 
   # ROUTES
+  @app.route('/')
+  def main():
+    geeting = "You're a wizard Harry!"
+    return greeting
+
   '''
   GET /movies
   '''
