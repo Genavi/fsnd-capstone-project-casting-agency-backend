@@ -124,12 +124,6 @@ ALTER TABLE ONLY public.movies ALTER COLUMN id SET DEFAULT nextval('public.movie
 COPY public.actors (id, name, age, gender) FROM stdin;
 1	Orlando Bloom	43	Male
 2	Viggo Mortensen	61	Male
-3	Elijah Wood	39	Male
-4	Mark Hamill	68	Male
-5	Harrison Ford	77	Male
-6	Carrie Fisher	60	Female
-7	Liam Neeson	68	Male
-8	Natalie Portman	39	Female
 \.
 
 
@@ -138,26 +132,10 @@ COPY public.actors (id, name, age, gender) FROM stdin;
 --
 
 COPY public.movie_actors (movie_id, actor_id) FROM stdin;
-1	4
-1	6
-1	5
-2	4
-2	5
-2	6
-3	4
-3	5
-3	6
-4	7
-4	8
-5	1
-5	2
-5	3
-6	1
-6	2
-6	3
-7	1
-7	2
-7	3
+1	1
+1	2
+2	1
+2	2
 \.
 
 
@@ -166,14 +144,8 @@ COPY public.movie_actors (movie_id, actor_id) FROM stdin;
 --
 
 COPY public.movies (id, title, release_date) FROM stdin;
-1	Star Wars: Episode IV - A New Hope	1978-01-29T12:22:41.662+01:00
-2	Star Wars: Episode V - The Empire Strikes Back	1980-05-21T15:43:18.535+02:00
-3	Star Wars: Episode VI - Return of the Jedi	1983-06-02T15:44:38.753+02:00
-4	Star Wars: Episode I - The Phantom Menace	1999-07-15T19:14:22.494+02:00
-5	The Lord of the Rings: The Fellowship of the Ring	2001-12-19T15:45:36.897+01:00
-6	The Lord of the Rings: The Two Towers	2002-12-18T15:46:19.371+01:00
-7	The Lord of the Rings: The Return of the King	2003-12-17T15:46:53.887+01:00
-
+1	The Lord of the Rings: The Fellowship of the Ring	2001-12-19T15:45:36.897+01:00
+2	The Lord of the Rings: The Two Towers	2002-12-18T15:46:19.371+01:00
 \.
 
 
@@ -181,14 +153,14 @@ COPY public.movies (id, title, release_date) FROM stdin;
 -- Name: actors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davidringgenberg
 --
 
-SELECT pg_catalog.setval('public.actors_id_seq', 8, true);
+SELECT pg_catalog.setval('public.actors_id_seq', 2, true);
 
 
 --
 -- Name: movies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: davidringgenberg
 --
 
-SELECT pg_catalog.setval('public.movies_id_seq', 7, true);
+SELECT pg_catalog.setval('public.movies_id_seq', 2, true);
 
 
 --
