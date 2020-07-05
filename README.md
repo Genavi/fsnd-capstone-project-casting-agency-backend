@@ -16,6 +16,10 @@ In this project we are using the Authentication Service from [Auth0](https://aut
 
 Casting Agency producer, can perform all actions.
 
+User: `executiveproducer1.drlearn@gmail.com`
+
+Password: `vagne8-pivvEm-higkah`
+
 Permissions:
 ```
 - delete: actors
@@ -37,6 +41,10 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNjVWpBTFJ2bGpxVEROZ050MHRUcCJ9.eyJ
 
 Casting Agency director, can view actors and movies, add or delete an actor from the database and modify actors or movies.
 
+User: `castindirector1.drlearn@gmail.com`
+
+Password: `Wyjmar-visnom-zoqju2`
+
 Permissions:
 ```
 - delete: actors
@@ -56,6 +64,10 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNjVWpBTFJ2bGpxVEROZ050MHRUcCJ9.eyJ
 #### Casting Assistant
 
 Casting Agency employee, can view actors and movies.
+
+User: `castingassistant1.drlearn@gmail.com`
+
+Password: `vohxu2-bewgux-bynmuD`
 
 Permissions:
 ```
