@@ -1,5 +1,48 @@
 # Capstone Project: Casting Agency Backend
 
+## Authetication
+
+In this project we are using the Authentication Service from [Auth0](https://auth0.com).
+
+[Here](https://auth0.com/docs/quickstart/backend/python#configure-auth0-apis) you can read more on how the API was configured, the JWTs were validated and the routes were protected.
+
+### Application Roles
+
+#### Executive Producer
+
+Casting Agency producer, can perform all actions.
+
+Permissions:
+- delete: actors
+- delete: movies
+- get: actors
+- get: movies
+- patch: actors
+- patch: movies
+- post: actors
+- post: movies
+
+#### Casting Director
+
+Casting Agency director, can view actors and movies, add or delete an actor from the database and modify actors or movies.
+
+Permissions:
+- delete: actors
+- delete: movies
+- get: actors
+- get: movies
+- patch: actors
+- patch: movies
+- post: actors
+
+#### Casting Assistant
+
+Casting Agency employee, can view actors and movies.
+
+Permissions:
+- get: actors
+- get: movies
+
 ## Getting Started
 
 ### Installing Dependencies
@@ -29,6 +72,8 @@ This will install all of the required packages within the `requirements.txt` fil
 - [SQLAlchemy](https://www.sqlalchemy.org/) and [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/) are libraries to handle the lightweight sqlite database.
 
 - [jose](https://python-jose.readthedocs.io/en/latest/) JavaScript Object Signing and Encryption for JWTs. Useful for encoding, decoding, and verifying JWTS.
+
+- [Gunicorn](https://gunicorn.org) Gunicorn is a pure-Python HTTP server for WSGI applications. We'll be deploying our applications using the Gunicorn webserver.
 
 ## Running the server
 
