@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -28,15 +29,17 @@ def create_app(test_config=None):
       actor = Actor.query.get(actor_id)
       
       if movie is None:
+        logging.warning('Movie with ID {} not found'.format(movie_id))
         abort(404)
       
       if actor is None:
+        logging.warning('Actor with ID {} not found'.format(actor_id))
         abort(404)
 
       movie.cast.append(actor)
 
     except Exception as e:
-      print(e)
+      logging.warning(e)
       abort(404)
 
 
@@ -49,15 +52,17 @@ def create_app(test_config=None):
       actor = Actor.query.get(actor_id)
       
       if movie is None:
+        logging.warning('Movie with ID {} not found'.format(movie_id))
         abort(404)
 
       if actor is None:
+        logging.warning('Actor with ID {} not found'.format(actor_id))
         abort(404)
 
       movie.cast.remove(actor)
 
     except Exception as e:
-      print(e)
+      logging.warning(e)
       abort(404)
 
 
@@ -79,7 +84,7 @@ def create_app(test_config=None):
       }), 200
 
     except Exception as e:
-      print(e)
+      logging.warning(e)
       abort(404)
 
 
@@ -92,6 +97,7 @@ def create_app(test_config=None):
     try:
       body = request.get_json()
       if not ('title' in body and 'release_date' in body):
+        logging.warning('Not title or body were given')
         abort(422)
 
       new_movie = body.get('title')
@@ -104,7 +110,8 @@ def create_app(test_config=None):
         'success': True
       }), 200
 
-    except Exception:
+    except Exception as e:
+      logging.warning(e)
       abort(404)
 
 
@@ -119,9 +126,11 @@ def create_app(test_config=None):
       movie = Movie.query.get(movie_id)
 
       if movie is None:
+        logging.warning('Movie with ID {} not found'.format(movie_id))
         abort(404)
 
       if "title" in body and "title" is None or "release_date" in body and "release_date" is None:
+        logging.warning('Not title or release_date were given')
         abort(400)
 
       if "title" in body:
@@ -150,7 +159,7 @@ def create_app(test_config=None):
       }), 200
 
     except Exception as e:
-      print(e)
+      logging.warning(e)
       abort(404)
 
 
@@ -164,15 +173,18 @@ def create_app(test_config=None):
       movie = Movie.query.get(movie_id)
 
       if movie is None:
+        logging.warning('Movie with ID {} not found'.format(movie_id))
         abort(404)
           
       movie.delete()
 
       return jsonify({
-        'success': True
+        'success': True,
+        'movie_id': movie_id
       }), 200
         
     except Exception as e:
+      logging.warning(e)
       abort(404)
 
 
@@ -188,7 +200,8 @@ def create_app(test_config=None):
         'actors': [actor.format() for actor in Actor.query.all()]
       }), 200
 
-    except Exception:
+    except Exception as e:
+      logging.warning(e)
       abort(404)
 
 
@@ -201,6 +214,7 @@ def create_app(test_config=None):
     try:
       body = request.get_json()
       if not ('name' in body and 'age' in body and 'gender' in body):
+        logging.warning('Not name, age or gender were given')
         abort(422)
 
       new_name = body.get('name')
@@ -215,7 +229,7 @@ def create_app(test_config=None):
       }), 200
 
     except Exception as e:
-      print(e)
+      logging.warning(e)
       abort(404)
 
 
@@ -228,12 +242,13 @@ def create_app(test_config=None):
     try:
       body = request.get_json()
       actor = Actor.query.get(actor_id)
-      print(body)
 
       if actor is None:
+        logging.warning('Actor with ID {} not found'.format(actor_id))
         abort(404)
 
       if "name" in body and "name" is None or "age" in body and "age" is None or "gender" in body and "gender" is None:
+        logging.warning('No name, age or gender were given')
         abort(400)
 
       if "name" in body:
@@ -249,15 +264,11 @@ def create_app(test_config=None):
         movies = body['cast']
 
         ids = [movie['id'] for movie in movies if type(movie) is not int]
-        print("old movies")
         for movie in actor.movies:
-          print(movie.id)
           if movie.id not in (ids):
             delete_movie_cast(movie.id, actor_id)
 
-        print("new movies")
         for movie in movies:
-          print(movie)
           if type(movie) is int:
             add_movie_cast(movie, actor.id)
       
@@ -269,7 +280,7 @@ def create_app(test_config=None):
       }), 200
 
     except Exception as e:
-      print(e)
+      logging.warning(e)
       abort(404)
 
 
@@ -283,15 +294,18 @@ def create_app(test_config=None):
       actor = Actor.query.get(actor_id)
 
       if actor is None:
+        logging.warning('Actor with ID {} not found'.format(actor_id))
         abort(404)
           
       actor.delete()
 
       return jsonify({
-        'success': True
+        'success': True,
+        'actor': actor_id
       }), 200
       
-    except Exception:
+    except Exception as e:
+      logging.warning(e)
       abort(404)
 
 
