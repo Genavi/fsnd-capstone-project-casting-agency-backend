@@ -4,14 +4,14 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-from models import {
+from models import (
   setup_db,
   db_drop_and_create_all,
   Movie,
   Actor,
   movieActor,
   db
-}
+)
 from auth import AuthError, requires_auth
 
 
@@ -136,8 +136,7 @@ def create_app(test_config=None):
                 logging.warning('Movie with ID {} not found'.format(movie_id))
                 abort(404)
 
-            if "title" in body and "title" is None
-            or "release_date" in body and "release_date" is None:
+            if "title" in body and "title" is None or "release_date" in body and "release_date" is None:
                 logging.warning('Not title or release_date were given')
                 abort(400)
 
@@ -251,9 +250,7 @@ def create_app(test_config=None):
                 logging.warning('Actor with ID {} not found'.format(actor_id))
                 abort(404)
 
-            if "name" in body and "name" is None
-            or "age" in body and "age" is None
-            or "gender" in body and "gender" is None:
+            if "name" in body and "name" is None or "age" in body and "age" is None or "gender" in body and "gender" is None:
                 logging.warning('No name, age or gender were given')
                 abort(400)
 
