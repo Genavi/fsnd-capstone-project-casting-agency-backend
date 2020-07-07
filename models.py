@@ -7,7 +7,10 @@ database_path = os.environ.get('DATABASE_URL')
 
 if not database_path:
     database_name = "capstone_casting_agency"
-    database_path = "postgres://oynnvixkyusxxw:2defa27647e9063ab2c19778004145b2a9586e22b68b12f4311d19a98b865fa9@ec2-54-234-28-165.compute-1.amazonaws.com:5432/d76ahd8ueak4q"
+    database_path = """postgres://oynnvixkyusxxw:2defa2764
+    7e9063ab2c19778004145b2a9586e22b68b12f4311d19a98b865
+    fa9@ec2-54-234-28-165.compute-1.amazonaws.com:5432/
+    d76ahd8ueak4q"""
 
 db = SQLAlchemy()
 
@@ -15,6 +18,8 @@ db = SQLAlchemy()
 setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
+
+
 def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -22,21 +27,27 @@ def setup_db(app, database_path=database_path):
     db.init_app(app)
     db.create_all()
 
+
 '''
 db_drop_and_create_all()
     drops the database tables and starts fresh
     can be used to initialize a clean database
-    !!NOTE you can change the database_filename variable to have multiple verisons of a database
+    !!NOTE you can change the database_filename
+    variable to have multiple verisons of a database
 '''
+
+
 def db_drop_and_create_all():
     db.drop_all()
     db.create_all()
+
 
 '''
 MovieActor
 an assosiation table, extends the base SQLAlchemy Table
 '''
-movieActor = db.Table("movie_actors",
+movieActor = db.Table(
+    "movie_actors",
     db.Column("movie_id", db.Integer, db.ForeignKey("movies.id")),
     db.Column("actor_id", db.Integer, db.ForeignKey("actors.id"))
 )
@@ -45,12 +56,14 @@ movieActor = db.Table("movie_actors",
 Movie
 a persistent movie entity, extends the base SQLAlchemy Model
 '''
+
+
 class Movie(db.Model):
     __tablename__ = 'movies'
 
     id = Column(Integer().with_variant(Integer, "sqlite"), primary_key=True)
     title = Column(String(100), unique=True)
-    release_date =  Column(String(100), nullable=False)
+    release_date = Column(String(100), nullable=False)
 
     '''
     format()
@@ -63,7 +76,7 @@ class Movie(db.Model):
             'release_date': self.release_date,
             'cast': [actor.simple() for actor in self.cast]
         }
-    
+
     '''
     simple()
         small representation of the Movie model
@@ -119,14 +132,20 @@ class Movie(db.Model):
 Actor
 a persistent actor entity, extends the base SQLAlchemy Model
 '''
+
+
 class Actor(db.Model):
     __tablename__ = 'actors'
 
     id = Column(Integer().with_variant(Integer, "sqlite"), primary_key=True)
     name = Column(String(100), unique=True)
-    age =  Column(String(3), nullable=False)
-    gender =  Column(String(10), nullable=False)
-    movies = db.relationship("Movie", secondary=movieActor, backref=db.backref("cast", lazy="dynamic"))
+    age = Column(String(3), nullable=False)
+    gender = Column(String(10), nullable=False)
+    movies = db.relationship(
+        "Movie",
+        secondary=movieActor,
+        backref=db.backref("cast", lazy="dynamic")
+    )
 
     '''
     format()
@@ -140,7 +159,7 @@ class Actor(db.Model):
             'gender': self.gender,
             'movies': [movie.simple() for movie in self.movies]
         }
-    
+
     '''
     simple()
         small representation of the Actor model
